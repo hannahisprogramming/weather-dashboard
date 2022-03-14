@@ -1,1 +1,17 @@
-/* comment to initialize */
+:root{
+  --white: rgb(243, 240, 240);
+}
+
+* {
+  box-sizing: border-box;
+  font-family: 'Arial Narrow', Arial, sans-serif;
+}
+
+header {
+  background-color: rgb(37, 37, 175);
+}
+
+header h1 {
+  color: var(--white);
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
