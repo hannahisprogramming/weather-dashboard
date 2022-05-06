@@ -12,28 +12,29 @@
 </head>
 <body>
   <header class="bg-warning text-center">
-    <h1>Weather Dashboard</h1>
-    <p>By: Hannah</p>
+    <h1 class="m-2 p-2">Weather Dashboard</h1>
+    <p class="m-2 p-2">By: Hannah</p>
   </header>
   
-  <main class="container">
+  <main class="m-3 p-3">
     <div class="row">
-      <div class="col-4">
+      <div class="col-2">
         <form>
-          <div class="col-auto">
-            <label for="cityName" class="m-1">Enter City Name:</label>
-            <input type="text" class="form-control-plaintext" id="cityName" placeholder="City">
+          <div class="d-grid gap-2">
+            <label for="cityName" class="fs-4 fw-bold">Search for a City:</label>
+            <input type="text" class="form-control-plaintext mb-2" id="cityName" placeholder="City">
           </div>
-          <div class="col-auto">
-            <button type="submit" id="submit" class="btn btn-primary mb-3">Search Forecast</button>
+          <div class="d-grid gap-2">
+            <button type="submit" id="submit" class="submit btn btn-primary text-center">Search</button>
+          </div>
+          <div class="d-grid gap-2" id="history">
+            <hr>
           </div>
         </form>
       </div>
-      <div class="col-8" id="forecast"></div>
-    </div>
-    <div class="row">
-      <div class="col-12" id="5dayForecast">
-        
+      <div class="col-10 justify-content-center">
+        <div class="row" id="forecast"></div>
+        <div class="row d-flex flex-wrap justify-content-between" id="5dayForecast"></div>
       </div>
     </div>
   </main>

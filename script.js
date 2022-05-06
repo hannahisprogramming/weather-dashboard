@@ -1,14 +1,52 @@
 const apiKey = "5b69c3d8f369d5f1a210756576ee1267";
+var cities = JSON.parse(localStorage.getItem("cities"));
 
+// var submit = document.getElementById("submit");
+// submit.addEventListener("click", (event) => {
+//   event.preventDefault();
+//   var cityName = document.getElementById("cityName").value;
+//   console.log(cityName);
+//   weatherForecast(cityName);
+//   saveHistory(cityName);
+// });
 
-var submit = document.getElementById("submit");
-submit.addEventListener("click", (event) => {
-  event.preventDefault();
-  var cityName = document.getElementById("cityName").value;
-  console.log(cityName);
-  weatherForecast(cityName);
-});
+document.querySelectorAll('.submit').forEach(item => {
+  item.addEventListener('click', event => {
+    event.preventDefault();
+    var cityName = document.getElementById("cityName").value || item.this.value;
+    console.log(cityName);
+    weatherForecast(cityName);
+  })
+})
 
+function saveHistory(cityName) {
+  let notSavedCity = true;
+  //check if city has already been searched
+  for (let i = 0; i < cities.length; i++) {
+    if(cityName === cities[i]){
+      notSavedCity = false;
+    }
+  }
+  //push city to local storage if it hasnt been searched
+  if(notSavedCity) {
+    cities.unshift(cityName);
+    if (cities.length > 12) {
+      cities.pop();
+    }
+    localStorage.setItem('cities', JSON.stringify(cities));
+  }
+  document.getElementById('history').innerHTML = `<hr>`;
+  displayHistory();
+}
+
+function displayHistory () {
+  //create buttons for searched cities
+  for (let i = 0; i < cities.length; i++){
+    document.getElementById('history').innerHTML += `
+      <button type="submit" value="${cities[i]}" class="submit btn btn-primary text-center">${cities[i]}</button>
+    `
+  }
+}
 
 function weatherForecast(cityName) {
   var url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`;
@@ -18,7 +56,9 @@ function weatherForecast(cityName) {
       console.log(apiResponse);
       var lat = apiResponse.coord.lat;
       var long = apiResponse.coord.lon;
+      var cityName = apiResponse.name;
       weatherLatLong(lat, long, cityName);
+      saveHistory(cityName);
     })
 }
 
@@ -29,17 +69,34 @@ function weatherLatLong(lat, long, cityName) {
     .then((apiResponse) => {
       console.log(apiResponse);
       document.getElementById('forecast').innerHTML = `
-    <div class="card" style="width: 18rem;">
-      <h3 class="city">${cityName}</h3>
-      <div class="card-body">
-        <img src="http://openweathermap.org/img/wn/${apiResponse.current.weather[0].icon}@2x.png" class="card-img-top" alt="${apiResponse.current.weather[0].description}">
-        <h5 class="card-title">Temperature: ${apiResponse.current.temp} F</h5>
-        <p class="card-text">Humidity: ${apiResponse.current.humidity}</p>
-        <p class="card-text">Wind Speed: ${apiResponse.current.wind_speed} mph</p>
-        <p class="card-text">Description: ${apiResponse.current.weather[0].description}</p>
-        <p class="card-text">UV Index: ${apiResponse.current.uvi}</p>
+      <div class="card bg-warning">
+        <h3 class="city m-2 p-2">${cityName}</h3>
+        <div class="card-body">
+          <h5 class="card-title">Temperature: ${apiResponse.current.temp} F</h5>
+          <p class="card-text">Humidity: ${apiResponse.current.humidity}</p>
+          <p class="card-text">Wind Speed: ${apiResponse.current.wind_speed} mph</p>
+          <p class="card-text">Description: ${apiResponse.current.weather[0].description}</p>
+          <p class="card-text">UV Index: ${apiResponse.current.uvi}</p>
+        </div>
       </div>
-    </div>
-    `
+      `
+      let htmlcode = "";
+      for (let i = 1; i <= 5; i++) {
+        htmlcode += `
+        <div class="card bg-info text-white mt-3" style="width: 13rem;">
+          <div class="card-body">
+            <img src="http://openweathermap.org/img/wn/${apiResponse.daily[i].weather[0].icon}@2x.png" class="card-img-top" alt="${apiResponse.current.weather[0].description}">
+            <h5 class="card-title">Temperature: ${apiResponse.daily[i].temp.day} F</h5>
+            <p class="card-text">Humidity: ${apiResponse.daily[i].humidity}%</p>
+            <p class="card-text">Wind Speed: ${apiResponse.daily[i].wind_speed} MPH</p>
+            <p class="card-text">Description: ${apiResponse.daily[i].weather[0].description}</p>
+            <p class="card-text">UV Index: ${apiResponse.daily[i].uvi}</p>
+          </div>
+        </div>
+        `
+      }
+      document.getElementById('5dayForecast').innerHTML = htmlcode;
     })
 }
+
+displayHistory();
