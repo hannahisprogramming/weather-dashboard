@@ -1,19 +1,16 @@
 const apiKey = "5b69c3d8f369d5f1a210756576ee1267";
 var cities = JSON.parse(localStorage.getItem("cities"));
-
-// var submit = document.getElementById("submit");
-// submit.addEventListener("click", (event) => {
-//   event.preventDefault();
-//   var cityName = document.getElementById("cityName").value;
-//   console.log(cityName);
-//   weatherForecast(cityName);
-//   saveHistory(cityName);
-// });
+let today = new Date().toLocaleDateString();
+function addDays(date, days) {
+  var result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result.toLocaleDateString();
+}
 
 document.querySelectorAll('.submit').forEach(item => {
   item.addEventListener('click', event => {
     event.preventDefault();
-    var cityName = document.getElementById("cityName").value || item.this.value;
+    var cityName = document.getElementById("cityName").value;
     console.log(cityName);
     weatherForecast(cityName);
   })
@@ -42,13 +39,19 @@ function saveHistory(cityName) {
 function displayHistory () {
   //create buttons for searched cities
   for (let i = 0; i < cities.length; i++){
-    document.getElementById('history').innerHTML += `
-      <button type="submit" value="${cities[i]}" class="submit btn btn-primary text-center">${cities[i]}</button>
-    `
+    const button = document.createElement("button");
+    button.classList.add("btn", "btn-primary", "text-center", "bg-light", "border-info", "text-info");
+    button.textContent = cities[i];
+    button.addEventListener("click", function(e) {
+      e.preventDefault();
+      weatherForecast(cities[i]);
+    })
+    document.getElementById('history').appendChild(button);
   }
 }
 
 function weatherForecast(cityName) {
+  console.log(cityName);
   var url = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`;
   fetch(url)
     .then(result => result.json())
@@ -70,7 +73,7 @@ function weatherLatLong(lat, long, cityName) {
       console.log(apiResponse);
       document.getElementById('forecast').innerHTML = `
       <div class="card bg-warning">
-        <h3 class="city m-2 p-2">${cityName}</h3>
+        <h3 class="city m-2 p-2">${cityName} ${today}</h3>
         <div class="card-body">
           <h5 class="card-title">Temperature: ${apiResponse.current.temp} F</h5>
           <p class="card-text">Humidity: ${apiResponse.current.humidity}</p>
@@ -85,6 +88,7 @@ function weatherLatLong(lat, long, cityName) {
         htmlcode += `
         <div class="card bg-info text-white mt-3" style="width: 13rem;">
           <div class="card-body">
+            <h3>${addDays(today,i)}</h3>
             <img src="http://openweathermap.org/img/wn/${apiResponse.daily[i].weather[0].icon}@2x.png" class="card-img-top" alt="${apiResponse.current.weather[0].description}">
             <h5 class="card-title">Temperature: ${apiResponse.daily[i].temp.day} F</h5>
             <p class="card-text">Humidity: ${apiResponse.daily[i].humidity}%</p>
