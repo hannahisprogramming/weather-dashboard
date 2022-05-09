@@ -1,5 +1,5 @@
 const apiKey = "5b69c3d8f369d5f1a210756576ee1267";
-var cities = JSON.parse(localStorage.getItem("cities"));
+var cities = [];
 let today = new Date().toLocaleDateString();
 function addDays(date, days) {
   var result = new Date(date);
