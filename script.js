@@ -1,5 +1,5 @@
 const apiKey = "5b69c3d8f369d5f1a210756576ee1267";
-var cities = [];
+let cities = JSON.parse(localStorage.getItem("cities")) || [];
 let today = new Date().toLocaleDateString();
 function addDays(date, days) {
   var result = new Date(date);
@@ -17,7 +17,13 @@ document.querySelectorAll('.submit').forEach(item => {
 })
 
 function saveHistory(cityName) {
+  //check if cities exists in local storage
+  // if (localStorage.getItem("cities")) {
+  //   cities == localStorage.getItem(JSON.parse("cities"));
+  //   console.log(cities);
+  // }
   let notSavedCity = true;
+  let cities = JSON.parse(localStorage.getItem("cities")) || [];
   //check if city has already been searched
   for (let i = 0; i < cities.length; i++) {
     if(cityName === cities[i]){
@@ -38,6 +44,7 @@ function saveHistory(cityName) {
 
 function displayHistory () {
   //create buttons for searched cities
+  let cities = JSON.parse(localStorage.getItem("cities")) || [];
   for (let i = 0; i < cities.length; i++){
     const button = document.createElement("button");
     button.classList.add("btn", "btn-primary", "text-center", "bg-light", "border-info", "text-info");
