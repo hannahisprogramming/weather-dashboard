@@ -80,7 +80,7 @@ function weatherLatLong(lat, long, cityName) {
       console.log(apiResponse);
       document.getElementById('forecast').innerHTML = `
       <div class="card bg-warning">
-        <h3 class="city m-2 p-2">${cityName} ${today}<img src="http://openweathermap.org/img/wn/${apiResponse.current.weather[0].icon}@2x.png" class="card-img-top" alt="${apiResponse.current.weather[0].description}"></h3>
+        <h3 class="city m-2 p-2">${cityName} ${today}<img src="http://openweathermap.org/img/wn/${apiResponse.current.weather[0].icon}@2x.png" alt="${apiResponse.current.weather[0].description}"></h3>
         <div class="card-body">
           <h5 class="card-title">Temperature: ${apiResponse.current.temp} F</h5>
           <p class="card-text">Humidity: ${apiResponse.current.humidity}</p>
