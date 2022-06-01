@@ -82,6 +82,7 @@ function weatherLatLong(lat, long, cityName) {
       <div class="card bg-warning">
         <h3 class="city m-2 p-2">${cityName} ${today}</h3>
         <div class="card-body">
+          <img src="http://openweathermap.org/img/wn/${apiResponse.current.weather[0].icon}@2x.png" class="card-img-top" style="flex-direction:row;" alt="${apiResponse.current.weather[0].description}">
           <h5 class="card-title">Temperature: ${apiResponse.current.temp} F</h5>
           <p class="card-text">Humidity: ${apiResponse.current.humidity}</p>
           <p class="card-text">Wind Speed: ${apiResponse.current.wind_speed} mph</p>
